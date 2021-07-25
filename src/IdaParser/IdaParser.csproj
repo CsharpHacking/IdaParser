@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AhoCorasick" Version="2.0.46" />
     <PackageReference Include="Bia10.Utils" Version="1.0.25" />
   </ItemGroup>
 
