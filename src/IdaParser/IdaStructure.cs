@@ -22,10 +22,8 @@ namespace IdaParser
             FirstRow = new IdaStructureRowFirst(rows[0]);
 
             var varRows = rows[1..(rows.Length - 1)];
-            foreach((string row, int idx) in varRows.WithIndex())
-            {
+            foreach((string row, int idx) in varRows.WithIndex())        
                 MemberRows[idx] = new IdaStructureRow(row);
-            }
 
             LastRow = new IdaStructureRowLast(rows[rows.Length]);
         }
@@ -84,7 +82,11 @@ namespace IdaParser
 
         public IdaStructureRow(string str)
         {
-            //parse stuff
+            var rowSplit = str.Split(" ", 3);
+
+            AddressSpace = rowSplit[0].To<int>();
+            VarName = rowSplit[1];
+            VarIdaType = rowSplit[2];
         }
 
         public string DecideVarType(IdaStructureRow varRow)
@@ -124,7 +126,22 @@ namespace IdaParser
 
         public IdaStructureRowLast(string str)
         {
-            //parse stuff
+            var rowSplit = str.Split(" ", 3);
+
+            var addressSpace = rowSplit[0];
+            if (addressSpace.IsDigitsOnly() && addressSpace.ToCharArray().Length == 8)
+                AddressSpace = addressSpace.To<int>();
+
+            var structName = rowSplit[1];
+            if (structName.Contains("::"))
+            {
+                var classNameAndStructure = structName.Split("::");
+                var className = classNameAndStructure[0];
+                var structureName = classNameAndStructure[1];
+                StructureName = structureName;
+            }
+
+            StructEndTag = rowSplit[2];
         }
     }
 }
