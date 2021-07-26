@@ -13,19 +13,24 @@ namespace IdaParser
         {
         }
 
-        public IEnumerable<string> SearchForStructureInHeaderFile(string pathToHeaderFile, string structureName)
+        public IEnumerable<WordMatch> SearchForStructureInHeaderFile(string pathToHeaderFile, string structureName)
         {
             if (!pathToHeaderFile.Valid())
                 return null;
 
-            List<string> lines = new();
-            foreach (var searchLine in File.ReadLines(pathToHeaderFile))
-                lines.Add(searchLine);
+            var lines = 
+                File.ReadLines(pathToHeaderFile).Where(searchLine 
+                    => !string.IsNullOrEmpty(searchLine)).ToList();
 
             Console.WriteLine(lines.Count);
 
             var searchText = new AhoCorasick(lines);
-            return (IEnumerable<string>) searchText.Search(structureName).ToList();
+            var result = searchText.Search(structureName).ToList();
+
+            if (result.Count == 0)
+                Console.WriteLine("NOT FOUND!");
+
+            return result;
         }
     }
 }
