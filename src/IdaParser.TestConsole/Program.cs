@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace IdaParser.TestConsole
 {
-    class Program
+    internal static class Program
     {
-        static void Main()
+        private static void Main()
         {
             const string path = @"C:\Maplestory95.exe.h";
             var parser = new Parser();
@@ -23,8 +23,16 @@ namespace IdaParser.TestConsole
 
             if (!results.Any()) return;
 
-            foreach (var rslt in results)
-                Console.WriteLine("Idx: {0} Word: {1}", rslt.Item1, rslt.Item2);
+            List<string> linesToWrite = new();
+            const string openComment = "/*";
+            const string closeComment = "*/";
+
+            linesToWrite.Add(openComment);
+            linesToWrite.Add(closeComment);
+            linesToWrite.AddRange(results.Select(rslt => rslt.Item2));
+
+            foreach (var line in linesToWrite)
+                Console.WriteLine("Line: {0}", line);
         }
     }
 }

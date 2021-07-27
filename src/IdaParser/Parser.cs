@@ -41,6 +41,8 @@ namespace IdaParser
             if (!pathToHeaderFile.Valid())
                 return null;
 
+            var classNameClean = string.Empty;
+            var structureNameClean = string.Empty;
             var results = new List<Tuple<int, string>>();
             var lines = File.ReadLines(pathToHeaderFile).ToList();
 
@@ -61,10 +63,11 @@ namespace IdaParser
                             var lineSplit = curLine.Split("::");
                             if (lineSplit.Length == 2)
                             {
-                                var className = lineSplit[0].Replace("struct ", string.Empty);
-                                var structureName = "struct " + lineSplit[1];
+                                classNameClean = lineSplit[0].Replace("struct ", string.Empty);
+                                structureNameClean = lineSplit[1];
+                                var structureName = "struct " + structureNameClean;
 
-                                Console.WriteLine("className: {0}", className);
+                                Console.WriteLine("className: {0}", classNameClean);
 
                                 results.Add(new Tuple<int, string>(idx, structureName));
                             }
@@ -97,8 +100,20 @@ namespace IdaParser
                                     => lineToWrite.Replace(SizedIntegers.LongLong.GetDescription(), "long long"),
                                 _ when lineToWrite.Contains("tagPOINT") 
                                     => lineToWrite.Replace("tagPOINT", "POINT"),
+                                _ when lineToWrite.Contains(classNameClean + "::" + structureNameClean + "::")
+                                    => lineToWrite.Replace(classNameClean + "::" + structureNameClean + "::", string.Empty),
+                                _ when lineToWrite.Contains(classNameClean + "::")
+                                    => lineToWrite.Replace(classNameClean + "::", string.Empty),
+
                                 _ => lineToWrite
                             };
+
+                            var listOfIndices = lineToWrite.AllIndicesOf(" >").ToList();
+                            if (listOfIndices.Count is > 0 and < 2)
+                            {
+                                var indexOfPattern = listOfIndices.First();
+                                lineToWrite = lineToWrite.ReplaceAt(indexOfPattern, 1);
+                            }
 
                             results.Add(new Tuple<int, string>(nextLineIdx + i, lineToWrite));
                             i++;
