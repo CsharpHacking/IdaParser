@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IdaParser.Enums;
 using Utils.Enumeration;
+using Utils.Types.Enum;
 using Utils.Types.String;
 
 namespace IdaParser
@@ -45,12 +47,18 @@ namespace IdaParser
             Console.WriteLine("Lines: {0}", lines.Count);
 
             foreach (var (line, idx) in lines.WithIndex())
-                if (line.Contains(structName))
-                    if (line.Equals(structName))
+            {
+                var curLine = line;
+                if (curLine.StartsWith("struct") && curLine.Split(" ", 2)[1].Contains("__cppobj "))
+                    curLine = curLine.Replace("__cppobj ", string.Empty);
+
+                if (curLine.Contains(structName))
+                {
+                    if (curLine.Equals(structName))
                     {
-                        if (line.Contains("::"))
+                        if (curLine.Contains("::"))
                         {
-                            var lineSplit = line.Split("::");
+                            var lineSplit = curLine.Split("::");
                             if (lineSplit.Length == 2)
                             {
                                 var className = lineSplit[0].Replace("struct ", string.Empty);
@@ -76,7 +84,23 @@ namespace IdaParser
                         var i = 1;
                         while (lines[nextLineIdx + i] != structClosingBrace)
                         {
-                            results.Add(new Tuple<int, string>(nextLineIdx + i, lines[nextLineIdx + i]));
+                            var lineToWrite = lines[nextLineIdx + i];
+                            lineToWrite = lineToWrite switch
+                            {
+                                _ when lineToWrite.Contains(SizedIntegers.Char.GetDescription()) 
+                                    => lineToWrite.Replace(SizedIntegers.Char.GetDescription(), "char"),
+                                _ when lineToWrite.Contains(SizedIntegers.Short.GetDescription()) 
+                                    => lineToWrite.Replace(SizedIntegers.Short.GetDescription(), "short"),
+                                _ when lineToWrite.Contains(SizedIntegers.Int.GetDescription()) 
+                                    => lineToWrite.Replace(SizedIntegers.Int.GetDescription(), "int"),
+                                _ when lineToWrite.Contains(SizedIntegers.LongLong.GetDescription()) 
+                                    => lineToWrite.Replace(SizedIntegers.LongLong.GetDescription(), "long long"),
+                                _ when lineToWrite.Contains("tagPOINT") 
+                                    => lineToWrite.Replace("tagPOINT", "POINT"),
+                                _ => lineToWrite
+                            };
+
+                            results.Add(new Tuple<int, string>(nextLineIdx + i, lineToWrite));
                             i++;
                         }
 
@@ -85,6 +109,8 @@ namespace IdaParser
                             results.Add(new Tuple<int, string>(nextLineIdx + i, lines[nextLineIdx + i]));
                         }
                     }
+                }
+            }
 
             return results;
         }
