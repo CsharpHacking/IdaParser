@@ -61,15 +61,31 @@ namespace IdaParser
                         if (curLine.Contains("::"))
                         {
                             var lineSplit = curLine.Split("::");
-                            if (lineSplit.Length == 2)
+                            switch (lineSplit.Length)
                             {
-                                classNameClean = lineSplit[0].Replace("struct ", string.Empty);
-                                structureNameClean = lineSplit[1];
-                                var structureName = "struct " + structureNameClean;
+                                case 2:
+                                {
+                                    classNameClean = lineSplit[0].Replace("struct ", string.Empty);
+                                    structureNameClean = lineSplit[1];
+                                    var structureName = "struct " + structureNameClean;
 
-                                Console.WriteLine("className: {0}", classNameClean);
+                                    Console.WriteLine("className: {0}", classNameClean);
 
-                                results.Add(new Tuple<int, string>(idx, structureName));
+                                    results.Add(new Tuple<int, string>(idx, structureName));
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    classNameClean = lineSplit[0].Replace("struct ", string.Empty);
+                                    //TODO: structOrClass = lineSplit[1];
+                                    structureNameClean = lineSplit[2];
+                                    var structureName = "struct " + structureNameClean;
+
+                                    Console.WriteLine("className: {0}", classNameClean);
+
+                                    results.Add(new Tuple<int, string>(idx, structureName));
+                                    break;
+                                }
                             }
                         }
 
@@ -104,6 +120,8 @@ namespace IdaParser
                                     => lineToWrite.Replace(classNameClean + "::" + structureNameClean + "::", string.Empty),
                                 _ when lineToWrite.Contains(classNameClean + "::")
                                     => lineToWrite.Replace(classNameClean + "::", string.Empty),
+                                _ when lineToWrite.TrimStart().StartsWith("int b")
+                                    => lineToWrite.Replace("int", "bool"),
 
                                 _ => lineToWrite
                             };
