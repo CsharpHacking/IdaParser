@@ -46,7 +46,45 @@ namespace IdaParser
 
             foreach (var (line, idx) in lines.WithIndex())
                 if (line.Contains(structName))
-                    results.Add(new Tuple<int, string>(idx + 1, line));
+                    if (line.Equals(structName))
+                    {
+                        if (line.Contains("::"))
+                        {
+                            var lineSplit = line.Split("::");
+                            if (lineSplit.Length == 2)
+                            {
+                                var className = lineSplit[0].Replace("struct ", string.Empty);
+                                var structureName = "struct " + lineSplit[1];
+
+                                Console.WriteLine("className: {0}", className);
+
+                                results.Add(new Tuple<int, string>(idx, structureName));
+                            }
+                        }
+
+                        var nextLineIdx = idx + 1;
+                        const string structOpenBrace = "{";
+                        const string structClosingBrace = "};";
+                        if (lines[nextLineIdx] != structOpenBrace)
+                        {
+                            Console.WriteLine("next line invalid: {0}", lines[nextLineIdx]);
+                            continue;
+                        }
+
+                        results.Add(new Tuple<int, string>(nextLineIdx, lines[nextLineIdx]));
+
+                        var i = 1;
+                        while (lines[nextLineIdx + i] != structClosingBrace)
+                        {
+                            results.Add(new Tuple<int, string>(nextLineIdx + i, lines[nextLineIdx + i]));
+                            i++;
+                        }
+
+                        if (lines[nextLineIdx + i] == structClosingBrace)
+                        {
+                            results.Add(new Tuple<int, string>(nextLineIdx + i, lines[nextLineIdx + i]));
+                        }
+                    }
 
             return results;
         }

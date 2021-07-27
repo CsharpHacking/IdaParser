@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IdaParser.TestConsole
 {
@@ -11,10 +13,21 @@ namespace IdaParser.TestConsole
 
             //var results = parser.SearchForStructInHeaderFile(path, "struct CItemInfo::INCLEVELITEM");
             //foreach(var rslt in results)
-                //Console.WriteLine("Idx: {0} Word: {1}", rslt.Index, rslt.Word);
+            //Console.WriteLine("Idx: {0} Word: {1}", rslt.Index, rslt.Word);
 
-            var results2 = parser.SearchForStructInHeaderFile2(path, "struct CItemInfo::INCLEVELITEM");
-            foreach (var rslt in results2)
+            List<Tuple<int, string>> results = new();
+            string[] toSearchFor = {
+                "struct CItemInfo::INCLEVELITEM",
+                "struct CItemInfo::EXTENDEXPIREDATEITEM",
+                "struct CItemInfo::EXPIREDPROTECTINGITEM" ,
+                "struct CItemInfo::PROTECTONDIEITEM" };
+
+            foreach (var str in toSearchFor)
+                results.AddRange(parser.SearchForStructInHeaderFile2(path, str).ToList());
+
+            if (!results.Any()) return;
+
+            foreach (var rslt in results)
                 Console.WriteLine("Idx: {0} Word: {1}", rslt.Item1, rslt.Item2);
         }
     }
