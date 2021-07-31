@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdaParser", "src\IdaParser\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdaParser.TestConsole", "src\IdaParser.TestConsole\IdaParser.TestConsole.csproj", "{7E4AAA8A-FDF8-45F0-9BEF-2F8BBB024C8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdaParser.CppParser", "IdaParser.CppParser\IdaParser.CppParser.csproj", "{F2B6E135-2566-43F6-8935-7CD596F7DBF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7E4AAA8A-FDF8-45F0-9BEF-2F8BBB024C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E4AAA8A-FDF8-45F0-9BEF-2F8BBB024C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E4AAA8A-FDF8-45F0-9BEF-2F8BBB024C8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B6E135-2566-43F6-8935-7CD596F7DBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B6E135-2566-43F6-8935-7CD596F7DBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B6E135-2566-43F6-8935-7CD596F7DBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B6E135-2566-43F6-8935-7CD596F7DBF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

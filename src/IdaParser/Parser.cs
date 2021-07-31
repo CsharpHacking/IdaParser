@@ -82,9 +82,10 @@ namespace IdaParser
 
                 if (curLineSplit[1].Contains(","))
                 {
-                    var baseClass = curLineSplit[1];
+                    var baseClasses = curLineSplit[1].Split(",");
                 }
-                var baseClasses = curLineSplit[1];
+
+                var baseClass = curLineSplit[1];
             }
 
             if (line.Contains("::"))

@@ -18,7 +18,9 @@ namespace IdaParser.TestConsole
             //Console.WriteLine("Idx: {0} Word: {1}", rslt.Index, rslt.Word);
 
             List<Tuple<int, string>> results = new();
-            string[] toSearchFor = { "struct CItemInfo::Recovery" };
+            string[] toSearchFor = { 
+                "struct CItemInfo::SETITEMINFO",
+                "struct CItemInfo::PETFOODITEM" };
 
             foreach (var str in toSearchFor)
                 results.AddRange(parser.SearchForStructInHeaderFile2(path, str).ToList());
