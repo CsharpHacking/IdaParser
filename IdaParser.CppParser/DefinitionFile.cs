@@ -8,10 +8,10 @@ namespace IdaParser.CppParser
 {
     public class DefinitionFile
     {
-        private List<Tuple<int, string>> pragmas;
-        private List<Tuple<int, string>> includes;
-        private List<Tuple<int, string>> classes;
-        private List<Tuple<int, string>> structures;
+        public List<Tuple<int, string>> pragmas;
+        public List<Tuple<int, string>> includes;
+        public List<Tuple<int, string>> classes;
+        public List<Tuple<int, string>> structures;
 
         public DefinitionFile()
         {
