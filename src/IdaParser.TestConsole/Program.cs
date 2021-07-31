@@ -50,6 +50,8 @@ namespace IdaParser.TestConsole
                 Console.WriteLine("{0} at Line: {1}", @class, idx);
             foreach (var (idx, @struct) in defFile.structures)
                 Console.WriteLine("{0} at Line: {1}", @struct, idx);
+            foreach (var memberVar in defFile.classes.First().Item2.memberVar)
+                Console.WriteLine("Var Type: {0} Name: {1}", memberVar.DataType, memberVar.Name);
         }
     }
 }
