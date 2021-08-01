@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IdaParser.CppParser\IdaParser.CppParser.csproj" />
+    <ProjectReference Include="..\IdaParser.CppParser\IdaParser.CppParser.csproj" />
     <ProjectReference Include="..\IdaParser\IdaParser.csproj" />
   </ItemGroup>
 

@@ -117,7 +117,7 @@ namespace IdaParser.CppParser
 
             Console.WriteLine("strA {0} strB: {1} HashEqual: {2} StringEqual: {3}", strA, strB, areHashEqual, areStringEqual);
 
-            return (areHashEqual && AreStringsEqual(strA, strB));
+            return areHashEqual && areStringEqual;
         }
 
         public string GetSubStringSizeOfTypeStr(string str, string typeStr)
