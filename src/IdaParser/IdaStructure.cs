@@ -91,22 +91,22 @@ namespace IdaParser
 
         public string DecideVarType(IdaStructureRow varRow)
         {
-            switch (varRow.VarIdaType.GetValueFromEnumDescription<IdaDatatypes>())
+            switch (varRow.VarIdaType.GetValueFromEnumDescription<IdaDataTypes>())
             {
-                case IdaDatatypes.DataByte:
+                case IdaDataTypes.DataByte:
                     //check varPerfix for help
                     break;
-                case IdaDatatypes.DataWord:
+                case IdaDataTypes.DataWord:
                     if (varRow.VarName.StartsWith("n") || varRow.VarName.StartsWith("t"))
                     {
                         return "int";
                     }
                     //check varPerfix for help
                     break;
-                case IdaDatatypes.DataDoubleWord:
+                case IdaDataTypes.DataDoubleWord:
                     //check varPerfix for help
                     break;
-                case IdaDatatypes.DataQuadWord:
+                case IdaDataTypes.DataQuadWord:
                     //check varPerfix for help
                     break;
 

@@ -2,7 +2,7 @@
 
 namespace IdaParser.Enums
 {
-    enum IdaDatatypes //we assume we diassemble on x86/x64 this will be false on other CPUs
+    public enum IdaDataTypes //we assume we diassemble on x86/x64 this will be false on other CPUs
     {
         [Description("db")]
         DataByte = 1,       //1 byte  | signed char/unsigned char
