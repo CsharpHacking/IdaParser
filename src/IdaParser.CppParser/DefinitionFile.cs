@@ -81,20 +81,18 @@ namespace IdaParser.CppParser
                 }
                 else if (!curLine.Contains("{") && !curLine.Contains("};") && !curLine.Contains("//"))
                 {
-                    //check basic types
                     var basicType = GetBasicType(curLine);
                     if (!string.IsNullOrEmpty(basicType))
                     {
-                        cppClass.memberVar.Add(new CppVar(basicType,
-                                curLine.Replace(basicType, string.Empty)));
+                        var varName = curLine.Replace(basicType, string.Empty).Trim();
 
+                        cppClass.memberVar.Add(new CppVar(basicType, varName));
                         continue;
                     }
 
-                    //TODO: split at index
-                    var curLineSplit = curLine.Split(" ", 2);
+                    var curLineSplit = curLine.SplitIfNotPrecededByChar(" ", ',');
                     var dataType = curLineSplit[0];
-                    var name = curLineSplit[1];
+                    var name = curLineSplit[1].Trim();
 
                     cppClass.memberVar.Add(new CppVar(dataType, name));
                 }
