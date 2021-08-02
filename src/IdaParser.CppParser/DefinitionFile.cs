@@ -103,20 +103,22 @@ namespace IdaParser.CppParser
 
         public string GetBasicType(string line)
         {
-            foreach (SizedIntegers enumEntry in Enum.GetValues(typeof(SizedIntegers)))
-            {
-                var enumDescription = enumEntry.GetDescription();
+            var sizedIntegers = (from SizedIntegers enumEntry 
+                in Enum.GetValues(typeof(SizedIntegers)) 
+                select enumEntry.GetDescription()).ToList();
+            var cppDataTypes = (from CppDataTypes enumEntry 
+                in Enum.GetValues(typeof(CppDataTypes))
+                select enumEntry.GetDescription()).ToList();
 
-                if (enumDescription.StrictlyCharEqualTo(line.HeadSizeOfStrB(enumDescription)))
-                    return enumDescription;
-            }
-            foreach (CppDataTypes enumEntry in Enum.GetValues(typeof(CppDataTypes)))
-            {
-                var enumDescription = enumEntry.GetDescription();
+            var orderedSizedIntegers = sizedIntegers.OrderByDescending(x => x.Length).ToList();
+            foreach (var sizedInteger in orderedSizedIntegers.Where(sizedInteger 
+                => sizedInteger.StrictlyCharEqualTo(line.HeadSizeOfStrB(sizedInteger))))
+                return sizedInteger;
 
-                if (enumDescription.StrictlyCharEqualTo(line.HeadSizeOfStrB(enumDescription)))
-                    return enumDescription;
-            }
+            var orderedCppDataTypes = cppDataTypes.OrderByDescending(x => x.Length).ToList();
+            foreach (var orderedCppDataType in orderedCppDataTypes.Where(orderedCppDataType
+                => orderedCppDataType.StrictlyCharEqualTo(line.HeadSizeOfStrB(orderedCppDataType))))
+                return orderedCppDataType;
 
             return string.Empty;
         }
