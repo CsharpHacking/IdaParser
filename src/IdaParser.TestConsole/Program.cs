@@ -46,11 +46,11 @@ namespace IdaParser.TestConsole
             var defFile = new DefinitionFile();
             defFile.Parse(@"C:\Users\Bia\source\repos\MaplestoryV95.1\Classes\Definition\CItemInfo.h");
 
-            foreach (var (idx, @class) in defFile.classes)
-                Console.WriteLine("{0} at Line: {1}", @class, idx);
-            foreach (var (idx, @struct) in defFile.structures)
-                Console.WriteLine("{0} at Line: {1}", @struct, idx);
-            foreach (var memberVar in defFile.classes.First().Item2.memberVar)
+            foreach (var @class in defFile.classes)
+                Console.WriteLine("{0} at Line: {1}", @class, @class.LineIndex);
+            foreach (var @struct in defFile.structures)
+                Console.WriteLine("{0} at Line: {1}", @struct, @struct.LineIndex);
+            foreach (var memberVar in defFile.classes.First().memberVar)
                 Console.WriteLine("Var Type: {0} Name: {1}", memberVar.DataType, memberVar.Name);
         }
     }

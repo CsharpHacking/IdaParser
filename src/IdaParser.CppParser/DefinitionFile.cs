@@ -14,15 +14,15 @@ namespace IdaParser.CppParser
     {
         public List<Tuple<int, string>> pragmas;
         public List<Tuple<int, string>> includes;
-        public List<Tuple<int, CppClass>> classes;
-        public List<Tuple<int, string>> structures;
+        public List<CppClass> classes;
+        public List<CppStruct> structures;
 
         public DefinitionFile()
         {
             pragmas =  new List<Tuple<int, string>>();
             includes = new List<Tuple<int, string>>();
-            classes = new List<Tuple<int, CppClass>>();
-            structures = new List<Tuple<int, string>>();
+            classes = new List<CppClass>();
+            structures = new List<CppStruct>();
         }
 
         public void Parse(string pathToHeaderFile)
@@ -57,6 +57,8 @@ namespace IdaParser.CppParser
                     if (lines[nextLineIdx] != structOpenBrace) 
                         throw new Exception("Bad class definition!");
 
+                    cppClass = new CppClass(idx, line);
+
                     var i = 1;
                     while (lines[nextLineIdx + i] != structClosingBrace)
                     {
@@ -71,13 +73,13 @@ namespace IdaParser.CppParser
                             cppClass.memberStruct.Add(new CppStruct());
                         }
 
-                        classes.Add(new Tuple<int, CppClass>(idx, cppClass));
+                        classes.Add(cppClass);
                         i++;
                     }
                 }
                 else if (curLine.Contains("struct"))
                 {
-                    structures.Add(new Tuple<int, string>(idx, curLine));
+                    structures.Add(new CppStruct(idx, curLine));
                 }
                 else if (!curLine.Contains("{") && !curLine.Contains("};") && !curLine.Contains("//"))
                 {
@@ -114,9 +116,9 @@ namespace IdaParser.CppParser
                 return sizedInteger;
 
             var orderedCppDataTypes = cppDataTypes.OrderByDescending(x => x.Length).ToList();
-            foreach (var orderedCppDataType in orderedCppDataTypes.Where(orderedCppDataType
-                => orderedCppDataType.StrictlyCharEqualTo(line.HeadSizeOfStrB(orderedCppDataType))))
-                return orderedCppDataType;
+            foreach (var cppDataType in orderedCppDataTypes.Where(cppDataType
+                => cppDataType.StrictlyCharEqualTo(line.HeadSizeOfStrB(cppDataType))))
+                return cppDataType;
 
             return string.Empty;
         }

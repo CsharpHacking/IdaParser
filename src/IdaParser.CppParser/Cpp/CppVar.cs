@@ -1,9 +1,8 @@
 ﻿namespace IdaParser.CppParser.Cpp
 {
-    public class CppVar
+    public class CppVar : CppObj
     {
         public string DataType;
-        public string Name;
 
         public CppVar(string dataType, string name)
         {
